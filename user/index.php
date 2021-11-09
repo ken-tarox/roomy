@@ -176,7 +176,7 @@ $record = $db->query('SELECT count(*) FROM reservations');
 
   <div class="row p-3 form-signin2 resev_st"> 
     <form action="" method="post" enctype="multipart/form-data" name="mydata" class="form-signin2" >
-      <div class="d-flex justify-content-center" style="white-space: nowrap">
+      <div class="d-flex d-flex flex-wrap justify-content-center" style="white-space: nowrap">
         <div class="mr-4 flex-fill">
           <dt class="mb-2">予約日</dt>
           <dd>
