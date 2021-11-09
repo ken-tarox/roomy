@@ -11,7 +11,7 @@ if(ini_set('session.use_cookies')){
 session_destroy();
 
 setcookie('email', '', time()-3600);
-setcookie('password', '', time()-3600);
+// setcookie('password', '', time()-3600);
 
 header('Location: login.php');
 exit();
