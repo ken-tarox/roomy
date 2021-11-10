@@ -58,8 +58,7 @@
 </nav>
 
 <div class="container pb-5">
-  
-  <?php require('datepicker.php'); ?> 
+<?php require('datepicker.php'); ?> 
 
   <div class="row form-signin2">
     <h3>予約状況</h3>
