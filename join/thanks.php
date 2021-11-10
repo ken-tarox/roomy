@@ -4,7 +4,7 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
-	<title>サインイン完了</title>
+	<title>新規登録完了</title>
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 	<link rel="stylesheet" href="../style.css">
 </head>
@@ -21,10 +21,10 @@
 	</nav>
 	<div class="container pb-5">
 		<div class="row form-signin mt-5 " >
-			<h3>サインイン完了</h3>
+			<h3>新規登録完了</h3>
 		</div>
 		<div class="row py-5 form-signin resev_st"> 
-			<p>ユーザー登録が完了しました。ログインページからログインしてください。</p>
+			<p>新規ユーザー登録が完了しました。ログインページからログインしてください。</p>
 			<a href="../login.php" class="btn btn-lg  btn-primary btn-block mt-3">ログイン</a>
 		</div>
 	</div>
