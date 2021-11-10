@@ -62,7 +62,7 @@ if($_REQUEST['action'] == 'rewrite' && isset($_SESSION['join'])){
 </nav>
 <div class="container pb-5">
 	<form action="" method="post" enctype="multipart/form-data" class="form-signin mt-5">
-		<h1 class="h3 mb-3 font-weight-normal">サインイン</h1>
+		<h1 class="h3 mb-3 font-weight-normal">新規登録</h1>
 		<dl>
 			<dd>
 				<input type="text" name="name" size="35" maxlength="255" value="<?php print(htmlspecialchars($_POST['name'], ENT_QUOTES)); ?>" class="form-control" placeholder="Name" required autofocus/>

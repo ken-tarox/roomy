@@ -86,8 +86,8 @@
 
   <div class="row ">
     <div class="col-md-7  mx-auto rounded signin text-center">
-      <p class="mt-5">アカウント登録していない方はサインインしてください</p>
-      <a class="btn btn-block btn-gr mt-3 mb-5"  href="join/index.php" role="button">サインイン</a>
+      <p class="mt-5">アカウント登録していない方は新規登録してください</p>
+      <a class="btn btn-block btn-gr mt-3 mb-5"  href="join/index.php" role="button">新規登録</a>
     </div>
   </div>
 </div>

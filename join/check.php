@@ -28,7 +28,7 @@ if(!empty($_POST)){
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
-	<title>サインイン</title>
+	<title>新規登録</title>
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 	<link rel="stylesheet" href="../style.css">
 </head>
@@ -45,7 +45,7 @@ if(!empty($_POST)){
 </nav>
 <div class="container pb-5">
 	<div class="row form-signin3 mt-5 " >
-		<h3>サインイン</h3>
+		<h3>新規登録</h3>
 	</div>
 	<div class="row py-3 form-signin3 resev_st"> 	
 		<form action="" method="post" class="p-2">
@@ -63,10 +63,10 @@ if(!empty($_POST)){
 				***********
 				</dd>
 			</dl>
-			<p>入力した内容が正しければ「登録する」ボタン、内容を修正する場合は「修正」ボタンをクリックしてください</p>
+			<p>入力した内容が正しければ「登録する」ボタン、内容を修正する場合は「修正する」ボタンをクリックしてください</p>
 			<div>
 			<input type="submit" value="登録する" class="btn btn-primary btn-block mb-3" >
-			<a href="index.php?action=rewrite" class="btn btn-secondary btn-block ">修正</a>
+			<a href="index.php?action=rewrite" class="btn btn-secondary btn-block ">修正する</a>
 			</div>
 		</form>
 	</div>

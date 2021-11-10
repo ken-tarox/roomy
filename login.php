@@ -85,8 +85,8 @@ if(!empty($_POST)){
       <input class="btn btn-lg btn-primary btn-block" type="submit" value="ログイン" />
     </div>
     <div class="my-3">
-      <p>会員登録がまだの方はこちらからどうぞ</p>
-      <p> <a href="join/" class="btn btn-lg btn-primary btn-block">サインイン</a></p>
+      <p>会員登録がまだの方はこちらから</p>
+      <p> <a href="join/" class="btn btn-lg btn-primary btn-block">新規登録</a></p>
     </div>
   </form>
 </div>

@@ -196,7 +196,7 @@ $record = $db->query('SELECT count(*) FROM reservations');
         <div class="mr-4 flex-fill">
           <dt class="mb-2">開始時刻</dt>
           <dd>
-            <input type="text"  id="onselectExample"  name="starttime1" class="custom-select custom-select-md " readonly="readonly" />
+            <input type="text"  id="onselectExample"  name="starttime1" class="custom-select custom-select-md " >
             <script>
               $('#onselectExample').timepicker({
                 minTime: '9:00',
