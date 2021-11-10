@@ -128,7 +128,7 @@ $record = $db->query('SELECT count(*) FROM reservations');
   </div>
   <div class="mb-5 row form-signin2">
     <form action="" method="post" enctype="multipart/form-data" name="myform">
-      <input type="text" name="date" id="datepicker" value="<?php print($date); ?>">
+      <input type="text" name="date" id="datepicker" value="<?php print($date); ?>" readonly="readonly" />
       <script>
         $("#datepicker").datepicker({
           dateFormat: 'yy-mm-dd',
@@ -196,7 +196,7 @@ $record = $db->query('SELECT count(*) FROM reservations');
         <div class="mr-4 flex-fill">
           <dt class="mb-2">開始時刻</dt>
           <dd>
-            <input type="text"  id="onselectExample"  name="starttime1" class="custom-select custom-select-md ">
+            <input type="text"  id="onselectExample"  name="starttime1" class="custom-select custom-select-md " readonly="readonly" />
             <script>
               $('#onselectExample').timepicker({
                 minTime: '9:00',

@@ -3,7 +3,7 @@
 </div>
 <div class="row form-signin2">
   <form action="" method="post" enctype="multipart/form-data" name="myform">
-    <input type="text" name="date" id="datepicker" value="<?php print($date); ?>">
+    <input type="text" name="date" id="datepicker" value="<?php print($date); ?>" readonly="readonly" />
 
     <script>
       $("#datepicker").datepicker({
