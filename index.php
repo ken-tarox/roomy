@@ -77,10 +77,12 @@ $record = $db->prepare('SELECT count(*) FROM reservations');
 	<title>会議室予約システム</title>
 
 	<link rel="stylesheet" href="style.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
-  <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1/i18n/jquery.ui.datepicker-ja.min.js"></script>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/themes/base/jquery-ui.min.css">
+ 
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+  
 
   <!-- <script type="text/javascript"> 
     $(function() { 
@@ -107,121 +109,87 @@ $record = $db->prepare('SELECT count(*) FROM reservations');
   </div>
   <div id="content">
     <div id="topic-ttl">
-        <h3>日付選択</h3>
+      <h3>日付選択</h3>
     </div>
     <form action="" method="post" enctype="multipart/form-data" name="myform">
-
-  <input type="text" name="date" id="datepicker" value="<?php print($date); ?>">
-
-  <script>
-    $("#datepicker").datepicker({
-      dateFormat: 'yy-mm-dd',
-      datepicker:false,
-    firstDay: 1, 
-    monthNames: [ "1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月" ],
-    minDate: new Date(),
-    maxDate: "+3m",
-
-		onSelect : function(dateText, inst) {
-      document.myform.submit();
-		}
-  });
-  
-  </script>
-
-</form>
-
+      <input type="text" name="date" id="datepicker" value="<?php print($date); ?>">
+      <script>
+        $("#datepicker").datepicker({
+          dateFormat: 'yy-mm-dd',
+          datepicker:false,
+          firstDay: 1, 
+          monthNames: [ "1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月" ],
+          minDate: new Date(),
+          maxDate: "+3m",
+          onSelect : function(dateText, inst) {
+          document.myform.submit();
+        }
+      });
+      </script>
+    </form>
     <div id="topic-ttl">
-<h3>予約状況</h3>
-</div>
-<div class="slider">
-<table >
-<thead>
-<tr>
-<th ><?php print($date); ?></th>
-<?php
-for ($num = 9; $num <= 20; $num++){
-echo('<th colspan="4">'.$num.'</th>') ;
-}
-?>
-</tr>
-</thead>
+      <h3>予約状況</h3>
+    </div>
+    <div class="slider">
+      <table>
+        <thead>
+          <tr>
+            <th ><?php print($date); ?></th>
+            <?php
+              for ($num = 9; $num <= 20; $num++){
+              echo('<th colspan="4">'.$num.'</th>') ;
+              }
+            ?>
+          </tr>
+        </thead>
+        <?php
+        //配列変数にデータを格納
+        foreach($statementdate as $index => $state){
+          $room[$index] = substr($state['item'],4);
+          $strday[$index] = $state['date']."09:00:00";
+          $starttime[$index] = $state['starttime'];
+          $endtime[$index] = $state['endtime'];
 
-<?php
-//まず配列変数にデータを格納します。
-foreach($statementdate as $index => $state){
+          $strbusi[$index] = new DateTime($strday[$index]);
+          $strres[$index] = new DateTime($starttime[$index]);
+          $endres[$index] = new DateTime($endtime[$index]);
 
-// echo '<pre>';
-// var_dump($state);
-// echo '</pre>';
-// echo '<br><br><br>';
-
-  $room[$index] = substr($state['item'],4);
-  //echo '$room['.$index.']='.$room[$index].'<br><br>';
-  $strday[$index] = $state['date']."09:00:00";
-  $starttime[$index] = $state['starttime'];
-  $endtime[$index] = $state['endtime'];
-  // var_dump($room[$index]);
-  // echo 'true';
-
-
-// if($date==$strday[$index]){
-//   echo('true');
-// }else{
-//   echo('false');
-// };
-$strbusi[$index] = new DateTime($strday[$index]);
-$strres[$index] = new DateTime($starttime[$index]);
-$endres[$index] = new DateTime($endtime[$index]);
-// var_dump($strbusi[$index]);
-// $tbstr = 5;
-// $tbend = 12;
-
-$strpt[$index] = $strres[$index]->diff($strbusi[$index]);
-$tbstr[$index] = ($strpt[$index]->h*60+$strpt[$index]->i)/15;
-//echo '$tbstr['.$index.']='.$tbstr[$index].'<br><br>';
-$endpt[$index] = $endres[$index]->diff($strres[$index]);
-$tbend[$index] = ($endpt[$index]->h*60+$endpt[$index]->i)/15+$tbstr[$index];
-//echo '$tbend['.$index.']='.$tbend[$index].'<br><br>';
-}
-
-//1行ずつ処理していきます。
-for($roomnum = 1; $roomnum <= 3; $roomnum++){
-echo '<tr>';
-echo '<th>ROOM'.$roomnum.'</th>';
-echo '<div class=""> ';
-//1セルずつ処理していきます。
-for ($i = 1; $i <=48 ; $i++)
-{
-$flag=false;
-//全レコードをチェックします。
-for ($ind = 0; $ind <= $count-1 ; $ind++)
-{
-//ルーム番号が同じ時だけ処理します。
-if($room[$ind]==$roomnum){
-
-            //いずれからのレコードの時間幅の間におさまるときだけフラグをtrueに変えます。
-            if($i >= $tbstr[$ind] && $i <= $tbend[$ind]){
-                $flag=true;
-            }
-          }
+          $strpt[$index] = $strres[$index]->diff($strbusi[$index]);
+          $tbstr[$index] = ($strpt[$index]->h*60+$strpt[$index]->i)/15;
+          $endpt[$index] = $endres[$index]->diff($strres[$index]);
+          $tbend[$index] = ($endpt[$index]->h*60+$endpt[$index]->i)/15+$tbstr[$index];
         }
-        //フラグがtrueのときのみ色のついたセルを描画します。
+        
+        for($roomnum = 1; $roomnum <= 3; $roomnum++){
+        echo '<tr>';
+        echo '<th>ROOM'.$roomnum.'</th>';
+        echo '<div class=""> ';
+        //1セルずつ処理
+        for ($i = 1; $i <=48 ; $i++)
+        {
+        $flag=false;
+        //全レコードをチェック
+        for ($ind = 0; $ind <= $count-1 ; $ind++)
+        {
+        //ルーム番号が同じ時だけ処理
+        if($room[$ind]==$roomnum){
+           //いずれからのレコードの時間幅の間におさまるときだけフラグをtrueに変える
+           if($i >= $tbstr[$ind]+1 && $i <= $tbend[$ind]){
+            $flag=true;
+          }}
+        }
+        //フラグがtrueのときのみ色のついたセルを描画
         if($flag){
-          echo "<td $bg class=$i></td>";
-          // echo "<td bgcolor=#C0C0C0 class= $i></td>";
           $bg = 'bgcolor=#C0C0C0';
+          echo "<td $bg class=$i></td>";
         } else {
-          echo "<td  class=$i></td>";
-          $bg = '';
+          $bg_emp ='bgcolor=#FFFFFF';
+          echo "<td $bg_emp class=$i></td>";
         }
-      }
-}
-
-?>
-
-</table>
-</div>
+      }}
+        ?>
+      </table>
+    </div>  
 
     <div class="new-resist">
       <p>アカウント登録してない方は新規登録をしてください</p>
@@ -231,9 +199,11 @@ if($room[$ind]==$roomnum){
     <?php foreach($posts as $post): ?>
     <div class="msg">
       <img src="member_picture/<?php print(htmlspecialchars($post['picture'], ENT_QUOTES)); ?>" width="48" height="48" alt="<?php print(htmlspecialchars($post['name'], ENT_QUOTES)); ?>" />
-      <p><?php print(htmlspecialchars($post['message'], ENT_QUOTES)); ?><span class="name">（<?php print(htmlspecialchars($post['name'], ENT_QUOTES)); ?>）</span>[<a href="index.php?res=<?php print(htmlspecialchars($post['id'], ENT_QUOTES)); ?>">Re</a>]
+      <p>
+        <?php print(htmlspecialchars($post['message'], ENT_QUOTES)); ?><span class="name">（<?php print(htmlspecialchars($post['name'], ENT_QUOTES)); ?>）</span>[<a href="index.php?res=<?php print(htmlspecialchars($post['id'], ENT_QUOTES)); ?>">Re</a>]
       </p>
-      <p class="day"><a href="view.php?id=<?php print(htmlspecialchars($post['id'])); ?>"><?php print(htmlspecialchars($post['created'], ENT_QUOTES)); ?></a>
+      <p class="day">
+        <a href="view.php?id=<?php print(htmlspecialchars($post['id'])); ?>"><?php print(htmlspecialchars($post['created'], ENT_QUOTES)); ?></a>
 
         <?php if($post['reply_message_id'] > 0): ?>
         <a href="view.php?id=<?php print(htmlspecialchars($post['reply_message_id'], ENT_QUOTES));?>">

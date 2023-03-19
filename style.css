@@ -52,20 +52,20 @@ body {
 	white-space: nowrap;
 }
 
-table {
+.slider table {
 	width: 100%;
 	min-width: 900px;
 	border-collapse: collapse; border: 1px solid #686161;
 }
 
-th {
+.slider table th {
 	background-color: #fff;
 	color: #686161;
 	font-weight: normal;
 	font-weight: bold;
 }
 
-th,
+.slider table th,
 td {
 	border: 1px #959595 solid;
 	padding: 10px 15px;
