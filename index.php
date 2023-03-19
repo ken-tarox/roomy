@@ -23,8 +23,49 @@ session_start();
 // 	}
 // }
 
-	// $_POST['date'] === date('m月d日');
+$format = 'Y-m-d';
+$now = new \DateTime();
 
+$datey = $now->format('Y-m-d');
+
+if(empty($_POST)){
+	$date = $datey;
+}else{
+  $date = $_POST['date'];
+}
+
+$item = ['item1'=>'ROOM1',
+        'item2'=>'ROOM2',
+        'item3'=>'ROOM3'
+        ];
+
+foreach($item as $item_key => $item_val){
+  $item .="<option value='". $item_key;
+  $item .="'>". $item_val. "</option>";
+}
+
+$duration = [
+        '15'=>'15分',
+        '30'=>'30分',
+        '45'=>'45分',
+        '60'=>'1時間',
+        '75'=>'1時間15分',
+        '90'=>'1時間30分',
+        '105'=>'1時間45分',
+        '120'=>'2時間'
+        ];
+
+foreach($duration as $duration_key => $duration_val){
+  $duration .="<option value='". $duration_key;
+  $duration .="'>". $duration_val. "</option>";
+}
+
+$statementdate = $db->prepare("SELECT * FROM reservations r WHERE r.date ='$date'");
+$statementdate->execute();
+
+$record = $db->prepare('SELECT count(*) FROM reservations');
+  $record->execute();
+  $count = $record->fetchColumn();
 ?>
 
 <!DOCTYPE html>
@@ -41,116 +82,171 @@ session_start();
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1/i18n/jquery.ui.datepicker-ja.min.js"></script>
 
-  <script type="text/javascript"> 
+  <!-- <script type="text/javascript"> 
     $(function() { 
-      document.f.submit();
+      document.myform.submit()
     }
     return false;
     ); 
-</script> 
+</script>  -->
 
-  <!-- <script type="text/javascript">
+  <script type="text/javascript">
   
     window.onload = function(){
-      document.f.submit();
+      document.myform.submit();
       }
     return false;
-  </script> -->
+  </script>
 </head>
 
 <body>
 <div id="wrap">
   <div id="head">
-    <h1>会議室予約システム</h1>
+    <h1>ROOMY<span>会議室予約</span></h1>
+    <div class="head-login"><a href="login.php">ログイン</a></div>
   </div>
   <div id="content">
+    <div id="topic-ttl">
+        <h3>日付選択</h3>
+    </div>
+    <form action="" method="post" enctype="multipart/form-data" name="myform">
 
-<form name="f" action="" method="post" enctype="multipart/form-data">
-  <input type="text" name="date" id="datepicker" value="<?php print(date('m月d日')); ?>">
+  <input type="text" name="date" id="datepicker" value="<?php print($date); ?>">
+
   <script>
     $("#datepicker").datepicker({
-    dateFormat: 'mm月dd日',
+      dateFormat: 'yy-mm-dd',
+      datepicker:false,
     firstDay: 1, 
     monthNames: [ "1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月" ],
     minDate: new Date(),
-    maxDate: "+3m"
+    maxDate: "+3m",
+
+		onSelect : function(dateText, inst) {
+      document.myform.submit();
+		}
   });
+  
   </script>
-  <div><input   type="submit" value="予約予定日を確認する" /></div>
+
 </form>
-  
-  
 
-
-
-  <div id="">
-    <h3>予約状況</h3>
-  </div>
-    <div class="slider">
-  <table >
-  <thead>
-  <tr>
-    <th ><?php print(htmlspecialchars($_POST['date'], ENT_QUOTES)); ?></th>
-    <?php
-    for ($num = 9; $num <= 20; $num++){
-      echo('<th colspan="4">'.$num.'</th>') ;
-    }
-    ?>
-  </tr>
+    <div id="topic-ttl">
+<h3>予約状況</h3>
+</div>
+<div class="slider">
+<table >
+<thead>
+<tr>
+<th ><?php print($date); ?></th>
+<?php
+for ($num = 9; $num <= 20; $num++){
+echo('<th colspan="4">'.$num.'</th>') ;
+}
+?>
+</tr>
 </thead>
-  <tr>
-    <th>room1</th> 
-    <?php $i = 1;
-    while ($i <= 48) {
-    echo '<td></td>';
-    $i++;
-    }
-    ?>
-  </tr>
-  <tr>
-    <th>room2</th> 
-    <?php $i = 1;
-    while ($i <= 48) {
-    echo '<td></td>';
-    $i++;
-    }
-    ?>
-  </tr>
-  <tr>
-    <th>room3</th> 
-    <?php $i = 1;
-    while ($i <= 48) {
-    echo '<td></td>';
-    $i++;
-    }
-    ?>
-  </tr>
-  
+
+<?php
+//まず配列変数にデータを格納します。
+foreach($statementdate as $index => $state){
+
+// echo '<pre>';
+// var_dump($state);
+// echo '</pre>';
+// echo '<br><br><br>';
+
+  $room[$index] = substr($state['item'],4);
+  //echo '$room['.$index.']='.$room[$index].'<br><br>';
+  $strday[$index] = $state['date']."09:00:00";
+  $starttime[$index] = $state['starttime'];
+  $endtime[$index] = $state['endtime'];
+  // var_dump($room[$index]);
+  // echo 'true';
+
+
+// if($date==$strday[$index]){
+//   echo('true');
+// }else{
+//   echo('false');
+// };
+$strbusi[$index] = new DateTime($strday[$index]);
+$strres[$index] = new DateTime($starttime[$index]);
+$endres[$index] = new DateTime($endtime[$index]);
+// var_dump($strbusi[$index]);
+// $tbstr = 5;
+// $tbend = 12;
+
+$strpt[$index] = $strres[$index]->diff($strbusi[$index]);
+$tbstr[$index] = ($strpt[$index]->h*60+$strpt[$index]->i)/15;
+//echo '$tbstr['.$index.']='.$tbstr[$index].'<br><br>';
+$endpt[$index] = $endres[$index]->diff($strres[$index]);
+$tbend[$index] = ($endpt[$index]->h*60+$endpt[$index]->i)/15+$tbstr[$index];
+//echo '$tbend['.$index.']='.$tbend[$index].'<br><br>';
+}
+
+//1行ずつ処理していきます。
+for($roomnum = 1; $roomnum <= 3; $roomnum++){
+echo '<tr>';
+echo '<th>ROOM'.$roomnum.'</th>';
+echo '<div class=""> ';
+//1セルずつ処理していきます。
+for ($i = 1; $i <=48 ; $i++)
+{
+$flag=false;
+//全レコードをチェックします。
+for ($ind = 0; $ind <= $count-1 ; $ind++)
+{
+//ルーム番号が同じ時だけ処理します。
+if($room[$ind]==$roomnum){
+
+            //いずれからのレコードの時間幅の間におさまるときだけフラグをtrueに変えます。
+            if($i >= $tbstr[$ind] && $i <= $tbend[$ind]){
+                $flag=true;
+            }
+          }
+        }
+        //フラグがtrueのときのみ色のついたセルを描画します。
+        if($flag){
+          echo "<td $bg class=$i></td>";
+          // echo "<td bgcolor=#C0C0C0 class= $i></td>";
+          $bg = 'bgcolor=#C0C0C0';
+        } else {
+          echo "<td  class=$i></td>";
+          $bg = '';
+        }
+      }
+}
+
+?>
+
 </table>
 </div>
-    <div><a href="login.php">ログイン</a></div>
-    <div><a href="join/index.php">予約システム会員登録</a></div>
 
-<?php foreach($posts as $post): ?>
-    <div class="msg">
-    <img src="member_picture/<?php print(htmlspecialchars($post['picture'], ENT_QUOTES)); ?>" width="48" height="48" alt="<?php print(htmlspecialchars($post['name'], ENT_QUOTES)); ?>" />
-    <p><?php print(htmlspecialchars($post['message'], ENT_QUOTES)); ?><span class="name">（<?php print(htmlspecialchars($post['name'], ENT_QUOTES)); ?>）</span>[<a href="index.php?res=<?php print(htmlspecialchars($post['id'], ENT_QUOTES)); ?>">Re</a>]</p>
-    <p class="day"><a href="view.php?id=<?php print(htmlspecialchars($post['id'])); ?>"><?php print(htmlspecialchars($post['created'], ENT_QUOTES)); ?></a>
-
-<?php if($post['reply_message_id'] > 0): ?>
-<a href="view.php?id=<?php print(htmlspecialchars($post['reply_message_id'], ENT_QUOTES));?>">
-返信元のメッセージ</a>
-<?php endif; ?>
-
-<?php if($_SESSION['id'] == $post['member_id']): ?>
-[<a href="delete.php?id=<?php print(htmlspecialchars($post['id'])); ?>"
-style="color: #F33;">削除</a>]
-<?php endif; ?>
-    </p>
+    <div class="new-resist">
+      <p>アカウント登録してない方は新規登録をしてください</p>
+      <a href="join/index.php">新規会員登録</a>
     </div>
-<?php endforeach; ?>
-   
 
+    <?php foreach($posts as $post): ?>
+    <div class="msg">
+      <img src="member_picture/<?php print(htmlspecialchars($post['picture'], ENT_QUOTES)); ?>" width="48" height="48" alt="<?php print(htmlspecialchars($post['name'], ENT_QUOTES)); ?>" />
+      <p><?php print(htmlspecialchars($post['message'], ENT_QUOTES)); ?><span class="name">（<?php print(htmlspecialchars($post['name'], ENT_QUOTES)); ?>）</span>[<a href="index.php?res=<?php print(htmlspecialchars($post['id'], ENT_QUOTES)); ?>">Re</a>]
+      </p>
+      <p class="day"><a href="view.php?id=<?php print(htmlspecialchars($post['id'])); ?>"><?php print(htmlspecialchars($post['created'], ENT_QUOTES)); ?></a>
+
+        <?php if($post['reply_message_id'] > 0): ?>
+        <a href="view.php?id=<?php print(htmlspecialchars($post['reply_message_id'], ENT_QUOTES));?>">
+        返信元のメッセージ</a>
+        <?php endif; ?>
+
+        <?php if($_SESSION['id'] == $post['member_id']): ?>
+        [<a href="delete.php?id=<?php print(htmlspecialchars($post['id'])); ?>"
+        style="color: #F33;">削除</a>]
+        <?php endif; ?>
+      </p>
+    </div>
+    <?php endforeach; ?>
   </div>
 </div>
 </body>

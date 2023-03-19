@@ -15,12 +15,11 @@ if(!empty($_POST)){
       sha1($_POST['password'])
     ));
     $member = $login->fetch();
-
+    
     if($member){
       $_SESSION['id'] = $member['id'];
       $_SESSION['time'] = time();
       
-
       if($_POST['save'] === 'on'){
         setcookie('email', $_POST['email'], time()+60*60*24*14);
       }
@@ -78,6 +77,9 @@ if(!empty($_POST)){
       </dl>
       <div>
         <input type="submit" value="ログイン" />
+      </div>
+      <div>
+        <p><a href="/roomy">トップページ</a></p>
       </div>
     </form>
   </div>
