@@ -9,18 +9,19 @@ if(!isset($_SESSION['join'])){
 }
 
 if(!empty($_POST)){
-	$statement = $db->prepare('INSERT INTO members SET name=?, email=?, password=?, created=NOW()');
+	
+	$check=$statement = $db->prepare('INSERT INTO members SET name=?, email=?, password=?, created=NOW()');
 	$statement->execute(array(
 		$_SESSION['join']['name'],
 		$_SESSION['join']['email'],
 		sha1($_SESSION['join']['password'])
 	));
 	unset($_SESSION['join']);
-
 	header('Location: thanks.php');
 	exit();
+	
 }
-
+var_dump($_SESSION);
 ?>
 
 <!DOCTYPE html>
