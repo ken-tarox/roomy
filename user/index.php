@@ -41,7 +41,7 @@ if(isset($_SESSION['id']) && $_SESSION['time'] +3600 > time()){
 }
 
 $format = 'Y-m-d';
-$now = new \DateTime();
+$now = new DateTime();
 $datey = $now->format('Y-m-d');
 
 if(empty($_POST)){
@@ -50,7 +50,7 @@ if(empty($_POST)){
   $date = $_POST['date'];
 }
 
-$ids = $_SESSION['id'];
+$m_id = $_SESSION['id'];
 
 $item = ['item1'=>'ROOM1',
         'item2'=>'ROOM2',
@@ -85,7 +85,7 @@ $reservations->execute();
 // $statement->execute();
 
 // ログインユーザーの予約状況
-$statementdate = $db->prepare("SELECT r.* FROM members m, reservations r WHERE $ids=r.member_id and r.date ='$date'");
+$statementdate = $db->prepare("SELECT r.* FROM reservations r WHERE r.member_id = $m_id and r.date ='$date'");
 $statementdate->execute();
 
 // カラム数
@@ -103,12 +103,12 @@ $record = $db->prepare('SELECT count(*) FROM reservations');
 	<title>会議室予約システム</title>
 
 	<link rel="stylesheet" href="../style.css">
- <!-- <link rel="stylesheet" type="text/css" href="jquery.datetimepicker.css" > -->
 
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
-  <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1/i18n/jquery.ui.datepicker-ja.min.js"></script>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/themes/base/jquery-ui.min.css">
+ 
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
   
   <link rel="stylesheet" href="https://cdn.rawgit.com/jonthornton/jquery-timepicker/3e0b283a/jquery.timepicker.min.css">
   <script src="https://cdn.rawgit.com/jonthornton/jquery-timepicker/3e0b283a/jquery.timepicker.min.js"></script>
@@ -118,8 +118,7 @@ $record = $db->prepare('SELECT count(*) FROM reservations');
 <body>
 <div id="wrap">
   <div id="head">
-    <h1>会議室予約</h1>
-    <dt><?php print(htmlspecialchars($member['name'], ENT_QUOTES)); ?>さん・予約可能です</dt>
+  <h1>ROOMY<span>会議室予約</span></h1>
     <div><a href="../logout.php" class="">ログアウト</a></div>
   </div>
   <div id="content">
@@ -140,7 +139,7 @@ $record = $db->prepare('SELECT count(*) FROM reservations');
     </script>
     </form>
     <div id="topic-ttl">
-      <h3>予約状況</h3>
+      <h3><?php print(htmlspecialchars($member['name'], ENT_QUOTES)); ?>さんの予約状況</h3>
     </div>
     <div class="slider">
       <table>
@@ -157,69 +156,47 @@ $record = $db->prepare('SELECT count(*) FROM reservations');
         <?php
         //配列変数にデータを格納
         foreach($statementdate as $index => $state){
-
-        // echo '<pre>';
-        // var_dump($state);
-        // echo '</pre>';
-        // echo '<br><br><br>';
-
           $room[$index] = substr($state['item'],4);
-          //echo '$room['.$index.']='.$room[$index].'<br><br>';
           $strday[$index] = $state['date']."09:00:00";
           $starttime[$index] = $state['starttime'];
           $endtime[$index] = $state['endtime'];
-          // var_dump($room[$index]);
-          // echo 'true';
 
+          $strbusi[$index] = new DateTime($strday[$index]);
+          $strres[$index] = new DateTime($starttime[$index]);
+          $endres[$index] = new DateTime($endtime[$index]);
 
-        // if($date==$strday[$index]){
-        //   echo('true');
-        // }else{
-        //   echo('false');
-        // };
-        $strbusi[$index] = new DateTime($strday[$index]);
-        $strres[$index] = new DateTime($starttime[$index]);
-        $endres[$index] = new DateTime($endtime[$index]);
-        // var_dump($strbusi[$index]);
-        // $tbstr = 5;
-        // $tbend = 12;
+          $strpt[$index] = $strres[$index]->diff($strbusi[$index]);
+          $tbstr[$index] = ($strpt[$index]->h*60+$strpt[$index]->i)/15;
+          $endpt[$index] = $endres[$index]->diff($strres[$index]);
+          $tbend[$index] = ($endpt[$index]->h*60+$endpt[$index]->i)/15+$tbstr[$index];
+          }
 
-        $strpt[$index] = $strres[$index]->diff($strbusi[$index]);
-        $tbstr[$index] = ($strpt[$index]->h*60+$strpt[$index]->i)/15;
-        //echo '$tbstr['.$index.']='.$tbstr[$index].'<br><br>';
-        $endpt[$index] = $endres[$index]->diff($strres[$index]);
-        $tbend[$index] = ($endpt[$index]->h*60+$endpt[$index]->i)/15+$tbstr[$index];
-        //echo '$tbend['.$index.']='.$tbend[$index].'<br><br>';
-        }
-
-        //1行ずつ処理
-        for($roomnum = 1; $roomnum <= 3; $roomnum++){
-        echo '<tr>';
-        echo '<th>ROOM'.$roomnum.'</th>';
-        echo '<div class=""> ';
-        //1セルずつ処理
-        for ($i = 1; $i <=48 ; $i++)
-        {
-        $flag=false;
-        //全レコードをチェック
-        for ($ind = 0; $ind <= $count-1 ; $ind++)
-        {
-        //ルーム番号が同じ時だけ処理
-        if($room[$ind]==$roomnum){
-           //いずれからのレコードの時間幅の間におさまるときだけフラグをtrueに変える
-           if($i >= $tbstr[$ind] && $i <= $tbend[$ind]){
-            $flag=true;
-          }}
-        }
-        //フラグがtrueのときのみ色のついたセルを描画
-        if($flag){
-          echo "<td $bg class=$i></td>";
-          // echo "<td bgcolor=#C0C0C0 class= $i></td>";
-          $bg = 'bgcolor=#C0C0C0';
-        } else {
-          echo "<td  class=$i></td>";
-          $bg = '';
-        }
+          //1行ずつ処理
+          for($roomnum = 1; $roomnum <= 3; $roomnum++){
+          echo '<tr>';
+          echo '<th>ROOM'.$roomnum.'</th>';
+          echo '<div class=""> ';
+          //1セルずつ処理
+          for ($i = 1; $i <=48 ; $i++){
+          $flag=false;
+          //全レコードをチェック
+          for ($ind = 0; $ind <= $count-1 ; $ind++)
+          {
+          //ルーム番号が同じ時だけ処理
+          if($room[$ind]==$roomnum){
+            //いずれからのレコードの時間幅の間におさまるときだけフラグをtrueに変える
+            if($i >= $tbstr[$ind]+1 && $i <= $tbend[$ind]){
+              $flag=true;
+            }}
+          }
+          //フラグがtrueのときのみ色のついたセルを描画
+          if($flag){
+            $bg = 'bgcolor=#C0C0C0';
+            echo "<td $bg class=$i></td>";
+          } else {
+            $bg_emp ='bgcolor=#FFFFFF';
+            echo "<td $bg_emp class=$i></td>";
+          }
         }}
         ?>
       </table>

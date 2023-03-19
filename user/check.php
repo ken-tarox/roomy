@@ -1,6 +1,5 @@
 <?php
 session_start();
-
 require('../dbconnect.php');
 
 // 未ログイン時強制ページ戻し
@@ -19,29 +18,30 @@ $sday2 = new DateTimeImmutable($date1.$starttime1);
 $endtime2 = $sday2->modify('+'.$duration.'minutes')->format('Y-m-d H:i');
 $endtime = $sday2->modify('+'.$duration.'minutes')->format('H:i');
 // 日時修正セッション保存
-	$_SESSION['reserve']['starttime'] = $starttime2;
-	$_SESSION['reserve']['endtime'] = $endtime2;
+$_SESSION['reserve']['starttime'] = $starttime2;
+$_SESSION['reserve']['endtime'] = $endtime2;
 
-	$items = $_SESSION['reserve']['item'];
-	$starttimes = $_SESSION['reserve']['starttime'];
-	$endtimes = $_SESSION['reserve']['endtime'];
+$items = $_SESSION['reserve']['item'];
+$starttimes = $_SESSION['reserve']['starttime'];
+$endtimes = $_SESSION['reserve']['endtime'];
 
-	$sql = "SELECT COUNT(*) FROM reservations WHERE item = '$items' AND 
-    '$starttimes' BETWEEN starttime AND endtime";
-	var_dump($sql);
-	$stmt1 = $db->prepare($sql);
-    $stmt1->execute();
-	$count = $stmt1->fetchColumn();
-	// 存在チェック後の処理 ※1
-	if ($count != 0) {
-		echo "レコードあり";
-	} else {
-		echo "レコードなし";
-	};
-	if ($count != 0) {
-			$error['reserve'] = 'blank';
-		}
-	
+$sql = "SELECT COUNT(*) FROM reservations WHERE item = '$items' AND '$starttimes' <= starttime AND starttime < '$endtimes' OR '$starttimes' < endtime AND  endtime <= '$endtimes'";
+$stmt1 = $db->prepare($sql);
+$stmt1->execute();
+$count = $stmt1->fetchColumn();
+
+// 予約有無のチェック後の処理
+$base_overtime = $date1."21:00";
+$set_overtime = new DateTime($_SESSION['reserve']['endtime']);
+$base_endtime = new DateTime($base_overtime);
+
+if($count != 0){
+	$error['reserve'] = 'blank';	
+}elseif($set_overtime > $base_endtime){
+	$error['reserve2'] = 'blank';
+}else{
+};
+
 // データベース保存
 if(!empty($_POST)){
 	$reservation = $db->prepare('INSERT INTO reservations SET member_id=?, date=?, item=?, starttime=?, duration=?, endtime=?, created=NOW()');
@@ -57,7 +57,6 @@ if(!empty($_POST)){
 	header('Location: thanks.php');
 	exit();
 }
-
 ?>
 
 <!DOCTYPE html>
@@ -77,9 +76,11 @@ if(!empty($_POST)){
 
 	<div id="content">
 		<?php if($error['reserve'] === 'blank'): ?>
-            <p class="error">指定の時間帯はすでに予約が入っております。予約修正をおこなってください。</p>
+            <p class="error">指定の時間帯はすでに予約が入っています。予約修正をおこなってください。</p>
+		<?php elseif($error['reserve2'] === 'blank'): ?>
+			<p class="error">指定の時間帯は予約可能時間外です。予約修正をおこなってください。</p>
 		<?php else: ?>
-		<p>入力した内容を確認して、正しければ「予約する」ボタンをクリックしてください</p>
+			<p>入力した内容を確認して、正しければ「予約する」ボタンをクリックしてください</p>
 		<?php endif; ?>
 		<form action="" method="post">
 			<input type="hidden" name="action" value="submit" />

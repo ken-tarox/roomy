@@ -49,8 +49,9 @@ if($_REQUEST['action'] == 'rewrite' && isset($_SESSION['join'])){
 <body>
 <div id="wrap">
 	<div id="head">
-		<h1>予約システム会員登録</h1>
-	</div>
+		<h1>ROOMY<span>会議室予約</span></h1>
+		<div class="head-login"><a href="login.php">ログイン</a></div>
+  	</div>
 	<div id="content">
 		<p>次のフォームに必要事項をご記入ください。</p>
 		<form action="" method="post" enctype="multipart/form-data">
