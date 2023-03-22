@@ -19,9 +19,7 @@ if(!empty($_POST)){
 	unset($_SESSION['join']);
 	header('Location: thanks.php');
 	exit();
-	
 }
-var_dump($_SESSION);
 ?>
 
 <!DOCTYPE html>
@@ -36,31 +34,34 @@ var_dump($_SESSION);
 </head>
 <body>
 <div id="wrap">
-<div id="head">
-<h1>会員登録</h1>
-</div>
-
-<div id="content">
-<p>記入した内容を確認して、「登録する」ボタンをクリックしてください</p>
-<form action="" method="post">
-	<input type="hidden" name="action" value="submit" />
-	<dl>
-		<dt>ニックネーム</dt>
-		<dd>
-		<?php print(htmlspecialchars($_SESSION['join']['name'], ENT_QUOTES)); ?>
-		<dt>メールアドレス</dt>
-		<dd>
-		<?php print(htmlspecialchars($_SESSION['join']['email'], ENT_QUOTES)); ?>
-        </dd>
-		<dt>パスワード</dt>
-		<dd>
-		【***********】
-		</dd>
-	</dl>
-	<div><a href="index.php?action=rewrite">&laquo;&nbsp;書き直す</a> | <input type="submit" value="登録する" /></div>
-</form>
-</div>
-
+	<div id="head">
+		<h1>会員登録</h1>
+	</div>
+	<div id="content">
+		<div class="content_bg_form">
+		<p>予約内容を確認して、「登録する」ボタンをクリックしてください</p>
+		<form action="" method="post">
+			<input type="hidden" name="action" value="submit" />
+			<div class="reserve_info">
+				<dl>
+					<dt>ニックネーム</dt>
+					<dd>
+					<?php print(htmlspecialchars($_SESSION['join']['name'], ENT_QUOTES)); ?>
+					<dt>メールアドレス</dt>
+					<dd>
+					<?php print(htmlspecialchars($_SESSION['join']['email'], ENT_QUOTES)); ?>
+					</dd>
+					<dt>パスワード</dt>
+					<dd>
+					***********
+					</dd>
+				</dl>
+			</div>
+			<div class="login-button"><input type="submit" value="登録する" /></div>
+			<div class="rewrite-button"><a href="index.php?action=rewrite">登録内容修正</a></div>
+		</form>
+		</div>
+	</div>
 </div>
 </body>
 </html>

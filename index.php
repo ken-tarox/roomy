@@ -1,7 +1,6 @@
 <?php
 date_default_timezone_set('Asia/Tokyo');
 require('dbconnect.php');
-
 session_start();
 
 // if(empty($error)){
@@ -81,8 +80,11 @@ $record = $db->prepare('SELECT count(*) FROM reservations');
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/themes/base/jquery-ui.min.css">
  
- <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
-  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 
   <!-- <script type="text/javascript"> 
     $(function() { 
@@ -93,7 +95,6 @@ $record = $db->prepare('SELECT count(*) FROM reservations');
 </script>  -->
 
   <script type="text/javascript">
-  
     window.onload = function(){
       document.myform.submit();
       }
@@ -104,15 +105,17 @@ $record = $db->prepare('SELECT count(*) FROM reservations');
 <body>
 <div id="wrap">
   <div id="head">
-    <h1>ROOMY<span>会議室予約</span></h1>
-    <div class="head-login"><a href="login.php">ログイン</a></div>
+    <h1>ROOMY</h1>
+    <div class="head-login"><a class="login_button" href="login.php">ログイン</a></div>
   </div>
   <div id="content">
     <div id="topic-ttl">
       <h3>日付選択</h3>
     </div>
     <form action="" method="post" enctype="multipart/form-data" name="myform">
-      <input type="text" name="date" id="datepicker" value="<?php print($date); ?>">
+      <div class="inout_txt">
+        <input type="text" name="date" id="datepicker" value="<?php print($date); ?>">
+      </div>
       <script>
         $("#datepicker").datepicker({
           dateFormat: 'yy-mm-dd',
@@ -180,7 +183,7 @@ $record = $db->prepare('SELECT count(*) FROM reservations');
         }
         //フラグがtrueのときのみ色のついたセルを描画
         if($flag){
-          $bg = 'bgcolor=#C0C0C0';
+          $bg = 'bgcolor=#fec775';
           echo "<td $bg class=$i></td>";
         } else {
           $bg_emp ='bgcolor=#FFFFFF';
