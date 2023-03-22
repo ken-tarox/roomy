@@ -39,7 +39,6 @@ if(isset($_SESSION['id']) && $_SESSION['time'] +3600 > time()){
   header('Location: ../login.php');
   exit();
 }
-
 $format = 'Y-m-d';
 $now = new DateTime();
 $datey = $now->format('Y-m-d');
@@ -92,6 +91,9 @@ $statementdate->execute();
 $record = $db->prepare('SELECT count(*) FROM reservations');
   $record->execute();
   $count = $record->fetchColumn();
+
+
+  
 ?>
 
 <!DOCTYPE html>
@@ -113,17 +115,25 @@ $record = $db->prepare('SELECT count(*) FROM reservations');
   <link rel="stylesheet" href="https://cdn.rawgit.com/jonthornton/jquery-timepicker/3e0b283a/jquery.timepicker.min.css">
   <script src="https://cdn.rawgit.com/jonthornton/jquery-timepicker/3e0b283a/jquery.timepicker.min.js"></script>
 
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 
 <body>
 <div id="wrap">
   <div id="head">
-  <h1>ROOMY<span>会議室予約</span></h1>
-    <div><a href="../logout.php" class="">ログアウト</a></div>
+    <h1>ROOMY</h1>
+    <div><a href="../logout.php" class="login_button">ログアウト</a></div>
   </div>
   <div id="content">
+    <div id="topic-ttl">
+      <h3>日付選択</h3>
+    </div>
     <form action="" method="post" enctype="multipart/form-data" name="myform">
-       <input type="text" name="date" id="datepicker" value="<?php print($date); ?>">
+      <div class="inout_txt">
+        <input type="text" name="date" id="datepicker" value="<?php print($date); ?>">
+      </div>
        <script>
        $("#datepicker").datepicker({
         dateFormat: 'yy-mm-dd',
@@ -191,7 +201,7 @@ $record = $db->prepare('SELECT count(*) FROM reservations');
           }
           //フラグがtrueのときのみ色のついたセルを描画
           if($flag){
-            $bg = 'bgcolor=#C0C0C0';
+            $bg = 'bgcolor=#fec775';
             echo "<td $bg class=$i></td>";
           } else {
             $bg_emp ='bgcolor=#FFFFFF';
@@ -202,62 +212,96 @@ $record = $db->prepare('SELECT count(*) FROM reservations');
       </table>
     </div>  
 
-    <div id="">
+    <div id="topic-ttl">
       <h3>新規会議室予約</h3>
     </div>
-    <form action="" method="post" enctype="multipart/form-data" name="mydata">
-      <div>
-        <label for="item">予約日：</label>
-        <input type="hidden" value="<?php print(htmlspecialchars($date, ENT_QUOTES)); ?>" name="date"/>
-        <?php print(htmlspecialchars($date, ENT_QUOTES)); ?>
-      </div>
-      <div>
-        <label for="item">部屋タイプ：</label>
-        <select name="item">
-          <?php
-          echo $item; ?>
-        </select>
-      </div>
-      <div>
-        <label for="starttime1">開始時刻：</label>
-        <input type="text"  id="onselectExample"  name="starttime1"/>
-        <script>
-        $('#onselectExample').timepicker({
-          minTime: '9:00',
-          maxTime: '20:45',
-          step: 15,
-          timeFormat: 'H:i',
-        });
-        </script>
-      </div>
-      <div>
-        <label for="duration">利用時間：</label>
-        <select name="duration">
-          <?php
-          echo $duration; ?>
-        </select>
-      </div>
-      <div><input type="submit" name="submit1" value="次へ進む" /></div>
-    </form>
-
-    <div id="">
-      <h3>予約一覧</h3>
+    <div class="content_bg">
+      <form action="" method="post" enctype="multipart/form-data" name="mydata" class="form_bg">
+        <div class="list">
+          <label class="label_bg" for="item">予約日</label>
+          <input type="hidden" value="<?php print(htmlspecialchars($date, ENT_QUOTES)); ?>" name="date"/>
+          <?php print(htmlspecialchars($date, ENT_QUOTES)); ?>
+        </div>
+        <div class="list">
+          <label class="label_bg" for="item">部屋タイプ</label>
+          <div class="select_box">
+            <select class="" name="item">
+              <?php echo $item; ?>
+            </select>
+          </div>
+        </div>
+        <div class="list">
+          <label class="label_bg" for="starttime1">開始時刻</label>
+          <div class="inout_txt2">
+            <input type="text"  id="onselectExample"  name="starttime1"/>
+          </div>
+          <script>
+          $('#onselectExample').timepicker({
+            minTime: '9:00',
+            maxTime: '20:45',
+            step: 15,
+            timeFormat: 'H:i',
+          });
+          </script>
+        </div>
+        <div class="list">
+          <label class="label_bg" for="duration">利用時間</label>
+          <div class="select_box">
+            <select name="duration">
+              <?php
+              echo $duration; ?>
+            </select>
+          </div>
+        </div>
+        <div class="list-next">
+          <input class="button_bg" type="submit" name="submit1" value="次へ進む" />
+        </div>
+      </form>
     </div>
 
-    <?php foreach($reservations as $reservation): ?>
-      <div class="">
-        <?php if($_SESSION['id'] == $reservation['member_id']): ?>
-        <p>
-          <?php print(htmlspecialchars($reservation['item'], ENT_QUOTES)); ?>
-          <?php print(htmlspecialchars($reservation['date'], ENT_QUOTES)); ?>
-          <?php print(htmlspecialchars($reservation['starttime'], ENT_QUOTES)); ?>
-          <?php print(htmlspecialchars($reservation['endtime'], ENT_QUOTES)); ?>
-        </p>
-        [<a href="delete.php?id=<?php print(htmlspecialchars($reservation['id'])); ?>"
-        style="color: #F33;">削除</a>]
-        <?php endif; ?>
-        <?php endforeach; ?>
+    <div id="topic-ttl">
+      <h3>予約一覧</h3>
+    </div>
+    <div class="content_bg reserve_bg">
+        <table class="reserve_table">
+          <thead>
+            <tr>
+              <th>部屋</th>
+              <th>予約日</th>
+              <th>開始時刻</th>
+              <th>終了時刻</th>
+              <th></th>
+            </tr>
+          </thead>
+          <thead>
+            <?php foreach($reservations as $reservation): ?>
+            <?php if($_SESSION['id'] == $reservation['member_id']): ?>
+              <?php $r_starttime = $reservation['starttime']?>
+              <?php $r_endtime = $reservation['endtime']?>
+              <?php $rc_starttime = new DateTime($r_starttime)?>
+              <?php $rc_endtime = new DateTime($r_endtime)?>
+              <?php $r_item = $reservation['item']?>
+              
+              <?php if($r_item == 'item1'): ?>
+              <?php $rc_item = 'ROOM1'?>
+              <?php elseif($r_item == 'item2'): ?>
+              <?php $rc_item = 'ROOM2'?>
+              <?php elseif($r_item == 'item3'): ?>
+              <?php $rc_item = 'ROOM3'?>
+              <?php endif; ?>
+              <tr>
+                <td><?php print(htmlspecialchars($rc_item, ENT_QUOTES)); ?></td>
+                <td><?php print(htmlspecialchars($reservation['date'], ENT_QUOTES)); ?></td>
+                <td><?php print(htmlspecialchars($rc_starttime->format('H:i'), ENT_QUOTES));?></td>
+                <td><?php print(htmlspecialchars($rc_endtime->format('H:i'), ENT_QUOTES)); ?></td>
+                <td><a class="del_button" href="delete.php?id=<?php print(htmlspecialchars($reservation['id'])); ?>">削除</a></td>
+              </tr>
+            <?php endif; ?>
+            <?php endforeach; ?>
+          </thead>
+        </table>
       </div>
   </div>
+</div>
 </body>
 </html>

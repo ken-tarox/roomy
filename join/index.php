@@ -43,48 +43,57 @@ if($_REQUEST['action'] == 'rewrite' && isset($_SESSION['join'])){
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
-	<title>予約システム会員登録</title>
+	<title>新規会員登録</title>
 	<link rel="stylesheet" href="../style.css" />
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
 <div id="wrap">
 	<div id="head">
-		<h1>ROOMY<span>会議室予約</span></h1>
-		<div class="head-login"><a href="login.php">ログイン</a></div>
+		<h1><a class="home_link" href="../index.php">ROOMY</a></h1>
+		<div class="head-login"><a class="login_button" href="../login.php">ログイン</a></div>
   	</div>
 	<div id="content">
-		<p>次のフォームに必要事項をご記入ください。</p>
-		<form action="" method="post" enctype="multipart/form-data">
-			<dl>
-				<dt>名前<span class="required">必須</span></dt>
-				<dd>
-					<input type="text" name="name" size="35" maxlength="255" value="<?php print(htmlspecialchars($_POST['name'], ENT_QUOTES)); ?>" />
-					<?php if($error['name'] === 'blank'): ?>
-					<p class="error">＊名前を入力してください。</p>
-					<?php endif; ?>
-				</dd>
-				<dt>メールアドレス<span class="required">必須</span></dt>
-				<dd>
-					<input type="text" name="email" size="35" maxlength="255" value="<?php print(htmlspecialchars($_POST['email'], ENT_QUOTES)); ?>" />
-					<?php if($error['email'] === 'blank'): ?>
-					<p class="error">＊メールアドレスを入力してください。</p>
-					<?php endif; ?>
-					<?php if($error['email'] === 'duplicate'): ?>
-					<p class="error">＊指定されたメールアドレスは使われています。</p>
-					<?php endif; ?>
-				<dt>パスワード<span class="required">必須</span></dt>
-				<dd>
-					<input type="password" name="password" size="10" maxlength="20" value="<?php print(htmlspecialchars($_POST['password'], ENT_QUOTES)); ?>" />
-					<?php if($error['password'] === 'length'): ?>
-					<p class="error">＊パスワード４文字以上で入力してください。</p>
-					<?php endif; ?>
-					<?php if($error['password'] === 'blank'): ?>
-					<p class="error">＊パスワードを入力してください。</p>
-					<?php endif; ?>
-				</dd>
-			</dl>
-			<div><input type="submit" value="入力内容を確認する" /></div>
-		</form>
+		<div class="content_bg_form">
+			<p>次のフォームに必要事項をご記入ください</p>
+			<form action="" method="post" enctype="multipart/form-data">
+				<div class="cp_iptxt">
+					<label class="ef">
+						<input type="text" placeholder="Name" name="name" size="35" maxlength="255" value="<?php print(htmlspecialchars($_POST['name'], ENT_QUOTES)); ?>" />
+						<?php if($error['name'] === 'blank'): ?>
+						<p class="error">＊名前を入力してください</p>
+						<?php endif; ?>
+					</label>
+				</div>
+				<div class="cp_iptxt">
+					<label class="ef">
+						<input type="text" placeholder="Email" name="email" size="35" maxlength="255" value="<?php print(htmlspecialchars($_POST['email'], ENT_QUOTES)); ?>" />
+						<?php if($error['email'] === 'blank'): ?>
+						<p class="error">＊メールアドレスを入力してください</p>
+						<?php endif; ?>
+						<?php if($error['email'] === 'duplicate'): ?>
+						<p class="error">＊指定されたメールアドレスは使われています</p>
+						<?php endif; ?>
+					</label>
+				</div>
+				<div class="cp_iptxt">
+					<label class="ef">
+						<input type="password" name="password" size="10" maxlength="20" value="<?php print(htmlspecialchars($_POST['password'], ENT_QUOTES)); ?>" />
+						<?php if($error['password'] === 'length'): ?>
+						<p class="error">＊パスワード４文字以上で入力してください。</p>
+						<?php endif; ?>
+						<?php if($error['password'] === 'blank'): ?>
+						<p class="error">＊パスワードを入力してください。</p>
+						<?php endif; ?>
+					</label>
+				</div>
+				<div class="login-button">
+					<input type="submit" value="入力内容を確認する" />
+				</div>
+			</form>
+		</div>
 	</div>
 </div>
 </body>
