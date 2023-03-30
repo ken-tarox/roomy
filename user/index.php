@@ -265,7 +265,7 @@ $record = $db->prepare('SELECT count(*) FROM reservations');
     <div class="content_bg reserve_bg">
         <table class="reserve_table">
           <thead>
-            <tr>
+            <tr class="first_tr">
               <th>部屋</th>
               <th>予約日</th>
               <th>開始時刻</th>
