@@ -80,7 +80,7 @@ if($_REQUEST['action'] == 'rewrite' && isset($_SESSION['join'])){
 				</div>
 				<div class="cp_iptxt">
 					<label class="ef">
-						<input type="password" name="password" size="10" maxlength="20" value="<?php print(htmlspecialchars($_POST['password'], ENT_QUOTES)); ?>" />
+						<input type="password" placeholder="Password" name="password" size="10" maxlength="20" value="<?php print(htmlspecialchars($_POST['password'], ENT_QUOTES)); ?>" />
 						<?php if($error['password'] === 'length'): ?>
 						<p class="error">＊パスワード４文字以上で入力してください。</p>
 						<?php endif; ?>
