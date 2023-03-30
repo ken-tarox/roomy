@@ -358,6 +358,8 @@ input:-webkit-autofill {
 	border: none;
 	text-decoration: none;
 	margin: 0 auto;
+	display: block;
+	width: 100%;
 }
 
 .reserve_info{
