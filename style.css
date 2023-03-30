@@ -167,6 +167,7 @@ td {
 	padding: 5px 20px;
 	border-radius: 5px;
 	font-weight: bold;
+	-webkit-appearance: none;
 }
 
 .reserve_table{
@@ -176,6 +177,10 @@ td {
 .reserve_table th{
 	border-bottom: 1px solid #dfdede;
 	padding-bottom: 15px;
+}
+
+.reserve_table th:first-child{
+	padding: 15px 0;
 }
 
 .reserve_table td{
@@ -289,6 +294,7 @@ td {
 	border-bottom: 2px solid #1b2538;
 	background: transparent;
 	-webkit-appearance: none;
+	border-radius: 0;
 }
 
 .ef input[type='text']:focus, .ef input[type='password']:focus {
