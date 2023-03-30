@@ -1,6 +1,7 @@
 body {
 	margin: 0;
 	color: #514b4b;
+	font-family: -apple-system, BlinkMacSystemFont, Roboto, "Segoe UI", "Helvetica Neue", HelveticaNeue, YuGothic, "Yu Gothic Medium", "Yu Gothic", Verdana, Meiryo, sans-serif;
 }
 
 #wrap {
@@ -207,6 +208,7 @@ td {
 	letter-spacing: 1px;
 	border: 0;
 	color:#4b4a4a;
+	-webkit-appearance: none;
 }
 
 .select_box, .inout_txt2 {
@@ -237,6 +239,7 @@ td {
     color: #7f7171;
     font-size: 1em;
     cursor: pointer;
+	-webkit-appearance: none;
 }
 
 .inout_txt2 input{
@@ -250,6 +253,7 @@ td {
     color: #7f7171;
     font-size: 1em;
     cursor: pointer;
+	-webkit-appearance: none;
 }
 
 .select_box select:focus {
@@ -284,11 +288,13 @@ td {
 	border: none;
 	border-bottom: 2px solid #1b2538;
 	background: transparent;
+	-webkit-appearance: none;
 }
 
 .ef input[type='text']:focus, .ef input[type='password']:focus {
 	border-bottom: 2px solid #ffaf1a;
 	outline: none;
+	-webkit-appearance: none;
 }
 input:-webkit-autofill {
 	box-shadow: 0 0 0px 999px #fff inset;
@@ -297,7 +303,6 @@ input:-webkit-autofill {
 .login-info{
     width: 100%;
 }
-
 
 .login-button input{
     width: 70%;
@@ -309,6 +314,7 @@ input:-webkit-autofill {
 	border: none;
 	margin-top: 20px;
 	font-weight: bold;
+	-webkit-appearance: none;
 }
 
 .thanks-button{
