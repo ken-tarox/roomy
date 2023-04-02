@@ -161,13 +161,12 @@ td {
 }
 
 .content_bg .form_bg .list-next .button_bg{
-	width: 70%;
-    padding:10px;
-    border-radius: 5px;
     font-size: 1rem;
 	background-color: #25b07ede;
 	color: #fff;
 	border: none;
+	padding: 5px 20px;
+	border-radius: 5px;
 	font-weight: bold;
 	-webkit-appearance: none;
 }
@@ -461,9 +460,15 @@ input:-webkit-autofill {
 	}
 
 	.content_bg .form_bg .list-next .button_bg{
-		width:70%;
-		padding: 10px 20px;
+		width: 70%;
+		padding:10px;
+		border-radius: 5px;
+		font-size: 1rem;
+		background-color: #25b07ede;
+		color: #fff;
+		border: none;
 		font-weight: bold;
+		-webkit-appearance: none;
 	}
 
 	.reserve_bg{
